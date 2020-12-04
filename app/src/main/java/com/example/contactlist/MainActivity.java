@@ -26,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        layoutManager=new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        ContactAdapter contactAdapter=new ContactAdapter(this,contactList);
+        recyclerView.setAdapter(contactAdapter);
+
         initField();
         addDataInList();
     }
@@ -48,9 +53,6 @@ public class MainActivity extends AppCompatActivity {
 
         contact=findViewById(R.id.contact);
         recyclerView=findViewById(R.id.recycler_view);
-        layoutManager=new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        ContactAdapter contactAdapter=new ContactAdapter(this,contactList);
-        recyclerView.setAdapter(contactAdapter);
+
     }
 }
