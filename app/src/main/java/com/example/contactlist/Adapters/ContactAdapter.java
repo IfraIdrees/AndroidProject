@@ -38,7 +38,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         ContactModelClass contactModelClass=contactList.get(position);
 
         holder.name.setText(contactList.get(position).getName());
-        holder.number.setText(String.valueOf(contactModelClass.getNumber()));
+        holder.number.setText(contactModelClass.getNumber());
 
 
     }

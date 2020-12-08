@@ -3,9 +3,9 @@ package com.example.contactlist.ModelClass;
 public class ContactModelClass {
 
     public String name;
-    public int number;
+    public String number;
 
-    public ContactModelClass(String name, int number) {
+    public ContactModelClass(String name, String number) {
         this.name = name;
         this.number = number;
     }
@@ -18,11 +18,11 @@ public class ContactModelClass {
         this.name = name;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 }

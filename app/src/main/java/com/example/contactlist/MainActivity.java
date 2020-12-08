@@ -1,10 +1,16 @@
 package com.example.contactlist;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.widget.TextView;
 
 import com.example.contactlist.Adapters.ContactAdapter;
@@ -18,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     TextView contact;
     RecyclerView recyclerView;
 
-    List<ContactModelClass> contactList=new ArrayList<>();
+    List<ContactModelClass> contactList = new ArrayList<>();
     RecyclerView.LayoutManager layoutManager;
 
     @Override
@@ -26,33 +32,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        layoutManager=new LinearLayoutManager(this);
+        contact = findViewById(R.id.contact);
+        recyclerView = findViewById(R.id.recycler_view);
+        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        ContactAdapter contactAdapter=new ContactAdapter(this,contactList);
+        ContactAdapter contactAdapter = new ContactAdapter(this, getContact());
         recyclerView.setAdapter(contactAdapter);
 
-        initField();
-        addDataInList();
-    }
 
-    private void addDataInList() {
-        contactList.add(new ContactModelClass("Ali",123456789));
-        contactList.add(new ContactModelClass("Ahmed",012345667));
-        contactList.add(new ContactModelClass("hamza",123456789));
-        contactList.add(new ContactModelClass("Ali",12344567));
-        contactList.add(new ContactModelClass("hamza",123456789));
-        contactList.add(new ContactModelClass("Ahmed",567239203));
-        contactList.add(new ContactModelClass("akbar",123456789));
-        contactList.add(new ContactModelClass("bilal",426796159));
-        contactList.add(new ContactModelClass("imran",123456789));
-        contactList.add(new ContactModelClass("Ali",432179654));
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) !=
+                PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 1);
+        } else {
+            getContact();
+        }
 
     }
 
-    private void initField() {
+    private List<ContactModelClass> getContact() {
 
-        contact=findViewById(R.id.contact);
-        recyclerView=findViewById(R.id.recycler_view);
+        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+                , null, null, null, null);
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String mobile = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
+            contactList.add(new ContactModelClass(name,mobile));
+        }
+        return contactList;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode==1){
+
+            if (grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                getContact();
+            }
+
+        }
     }
 }
