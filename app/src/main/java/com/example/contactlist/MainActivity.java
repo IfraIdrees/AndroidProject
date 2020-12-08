@@ -32,12 +32,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        contact = findViewById(R.id.contact);
-        recyclerView = findViewById(R.id.recycler_view);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        ContactAdapter contactAdapter = new ContactAdapter(this, getContact());
-        recyclerView.setAdapter(contactAdapter);
+
+        initField();
+
+
 
 
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) !=
@@ -47,6 +45,16 @@ public class MainActivity extends AppCompatActivity {
             getContact();
         }
 
+    }
+
+    private void initField() {
+
+        contact = findViewById(R.id.contact);
+        recyclerView = findViewById(R.id.recycler_view);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        ContactAdapter contactAdapter = new ContactAdapter(this, getContact());
+        recyclerView.setAdapter(contactAdapter);
     }
 
     private List<ContactModelClass> getContact() {
